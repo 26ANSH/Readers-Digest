@@ -18,7 +18,7 @@ Signup
 
     <div class="text-center w-full lg:w-1/2 md:w-3/5 mr-2 self-center">
         
-        <img src="{{ url_for('static', filename='login.svg')}}">
+        <img src="{{ url_for('static', filename='img/login.svg')}}">
         
     </div>
 
@@ -59,12 +59,11 @@ Signup
                                             class="mt-4 bg-blue-700 text-white py-1 px-2 font-semibold rounded-lg hover:bg-blue-800"><span
                                                 class="text-lg">signup <i class="fas text-xl fa-hand-point-right"></i></span></button>
                                         <a href="#"
-                                            class="text-sm text-blue-700 hover:bg-blue-100 hover:underline">Forgot
-                                            password?</a>
+                                            class="text-sm text-blue-700 hover:bg-blue-100 hover:underline">Know More</a>
                                     </div>
                                     <hr class="my-4 border-2 border-blue-700">
-                                    <span class="text-lg">Are you a Member ? <a href="/books/browse"
-                                            class="text-blue-700 hover:bg-blue-100 hover:underline">Browse books</a></span>
+                                    <span class="text-lg">Existing User ? <a href="{{ url_for('auth.login') }}"
+                                            class="text-blue-700 hover:bg-blue-100 hover:underline">Login</a></span>
                 </div>
             </form>
         </div>

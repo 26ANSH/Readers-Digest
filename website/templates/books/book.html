@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 
 {% block title %}
+Book in Detail
 {% endblock %}
 
 {% block content %}
@@ -32,6 +33,10 @@
                     <td class="border border-black p-1 px-2 font-bold">ISBN</td>
                     <td class="border border-black p-1 px-2 ">{{ book.volumeInfo.industryIdentifiers[0].identifier }}</td>
                 </tr>
+                <tr>
+                    <td class="border border-black p-1 px-2 font-bold">Likes</td>
+                    <td class="border border-black p-1 px-2 ">{{ book.likes }}</td>
+                </tr>
                 <!-- <tr>
                     <td class="border border-black p-1 px-2 font-bold">Quantity</td>
                     <td id="bookQuantity" class="border border-black p-1 px-2 ">book.quantity </td>
@@ -57,7 +62,8 @@
             </table>
         </div>
     </div>
-    <hr class="mt-2">
+    <!-- <button class="hover:bg-red-700 bg-red-900 text-white font-bold text-xl p-3" onclick="removeFromFavs('{{ book.id }}')">Delete this book</button> -->
+    <hr class="my-2">
     <!-- Add book description -->
     <div class="w-full break-words">
         <span class="font-bold">Description:</span> 
@@ -77,6 +83,8 @@
 
     {% endif %}
 
+    <script src="{{ url_for('static', filename='scripts/books/browse.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/books/favs.js') }}"></script>
 </div>
 
 {% endblock %}

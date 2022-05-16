@@ -18,7 +18,7 @@ Login
 
     <div class="text-center w-full lg:w-1/2 md:w-3/5 mr-2 self-center">
         
-        <img src="{{ url_for('static', filename='login.svg')}}">
+        <img src="{{ url_for('static', filename='img/login.svg')}}">
         
     </div>
 
@@ -58,14 +58,25 @@ Login
                                             password?</a>
                                     </div>
                                     <hr class="my-4 border-2 border-blue-700">
-                                    <span class="text-lg">Are you a Member ? <a href="/books/browse"
-                                            class="text-blue-700 hover:bg-blue-100 hover:underline">Browse books</a></span>
+                                    <span class="text-lg">New to Reader's Digest ? <a href="{{ url_for('auth.signup') }}"
+                                            class="text-blue-700 hover:bg-blue-100 hover:underline">Signup</a></span>
                 </div>
             </form>
         </div>
     </div>
 
 </div>
+
+<footer class="text-black bg-blue-100">
+
+    <div>
+      <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+        <p class="text-sm text-center sm:text-left">© 2022 Project Reader's Digest ~ Ansh Vidyabhanu
+        </p>
+        <span class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-sm">Hosted on Microsoft Azure / Docker</span>
+      </div>
+    </div>
+  </footer>
 
 <script>
 
