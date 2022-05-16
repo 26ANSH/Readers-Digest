@@ -1,27 +1,22 @@
 from flask import jsonify, redirect, url_for, Blueprint, request, session, render_template
 from flask_login import login_required, current_user
-import requests
+from ..api.books import book_details
 
 books = Blueprint('books', __name__)
 
-def book_details(id):
-    url = f"https://www.googleapis.com/books/v1/volumes/{id}"
-    try:
-        r = requests.get(url)
-        if r.status_code == 200:
-            book = r.json()
-            return {"result": book, "status": True}
-        else:
-            return {"result": f"There is no Book with ID: {id}", "status": False}
-    except Exception:
-        return {"result": "Something Went Wrong! Please Try Again", "status": False}
+@books.route('/')
+def hello():
+    return redirect(url_for('books.browse_books'))
+
+@books.route('/favs')
+def fav_books():
+    currentRoute = f'{request.url_rule.rule.split("/")[1]}-{request.url_rule.rule.split("/")[2]}'    
+    return render_template('books/favs.html', user=current_user, currentRoute=currentRoute)
 
 @books.route('/browse')
 @login_required
 def browse_books():
-    
-    currentRoute = f'{request.url_rule.rule.split("/")[1]}-{request.url_rule.rule.split("/")[2]}'
-    
+    currentRoute = f'{request.url_rule.rule.split("/")[1]}-{request.url_rule.rule.split("/")[2]}'    
     return render_template('books/browse.html', user=current_user, currentRoute=currentRoute)
 
 @books.route('/<id>')
@@ -35,5 +30,5 @@ def view_book(id):
     if book["status"]:
         return render_template('books/book.html', user=current_user, currentRoute=currentRoute, book=book["result"])
     else:
-        return render_template('books/error.html', user=current_user, currentRoute=currentRoute, error=book["result"])
+        return render_template('books/book.html', user=current_user, currentRoute=currentRoute, error=book["result"])
 
