@@ -42,8 +42,25 @@ class Books(db.Model):
 
     id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
-    isbn = db.Column(db.String(10), nullable=False, unique=True)
+    img = db.Column(db.String(150), nullable=False)
     likes = db.Column(db.Integer, default=0)
+
+    def _init_(self, id, name, img):
+        self.id = id
+        self.name = name
+        self.img = img
+
+    # Define serializable property
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'img': self.img,
+            'likes': self.likes
+        }
+
 class Blogs(db.Model):
 
     _tablename_ = 'blogs'
