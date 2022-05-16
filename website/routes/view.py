@@ -9,7 +9,5 @@ view = Blueprint('view', __name__)
 @view.route('/')
 def index():
     if current_user.is_authenticated:
-        return "Hello, {}".format(current_user.fname)
-    else:
-        return "Hello, Guest"
-
+        return redirect('/books')
+    return render_template('main/landing.html')
