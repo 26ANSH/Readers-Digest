@@ -10,7 +10,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect('/')
+        return redirect('/books')
     elif request.method == 'POST':
 
         email = request.form.get('userEmail')
@@ -31,7 +31,7 @@ def login():
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect('/')
+        return redirect('/books')
     elif request.method == 'POST':
         email = request.form.get('userEmail')
         name = request.form.get('userName').split()
@@ -45,13 +45,13 @@ def signup():
             return redirect(url_for('auth.signup', error="user exists"))
             
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-        new_user = User(email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'))
+        new_user = User(email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'), admin=False)
 
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user, remember=True)
-        return redirect('/')
+        return redirect('/books')
     else:
         return render_template('main/signup.html', error=request.args.get('error'))
 
