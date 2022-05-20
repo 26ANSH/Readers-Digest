@@ -46,8 +46,8 @@ def signup():
             return redirect(url_for('auth.signup', error="user exists"))
             
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-        new_user = Users(admin=True,email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'))
-        send_mail(email, 'Welcome to Readers Digest', 'Welcome to Readers Digest', 'http://172.20.10.2:80/', 'Click here to start reading')
+        new_user = Users(email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'))
+        send_mail(email, 'Welcome to Readers Digest', 'Welcome to Readers Digest, The Ultimate Virtual Library', 'http://172.20.10.2:80/', 'Click here to start reading')
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
