@@ -1,6 +1,6 @@
 from flask import jsonify, redirect, url_for, Blueprint, request, session, render_template, g
 from flask_login import current_user, login_required
-from ..auth.models import Users, Books, Issued
+from ..auth.models import Users, Books, Issued, Payment
 from .. import db, INIT_RENT, DAILY_RENT
 
 users = Blueprint('users', __name__)
@@ -84,3 +84,20 @@ def transactions():
 
     currentRoute = f'{request.url_rule.rule.split("/")[1]}-{request.url_rule.rule.split("/")[2]}'
     return render_template('users/transactions.html', user=current_user, transactions=Issued.query.all(), currentRoute=currentRoute)
+
+@users.post('/payments/<user>/add/<credit>')
+def credits(user, credit):
+    if current_user.is_admin == False:
+        return jsonify(error="Not authorized"), 401
+
+    new_pay = Payment(user, int(credit))
+    user = Users.query.get(user)
+    user.payments.append(new_pay)
+    db.session.commit()
+    return jsonify(payment = new_pay.serialize), 200
+
+@login_required
+@users.route('/payments')
+def payment_history():
+    currentRoute = f'{request.url_rule.rule.split("/")[1]}-{request.url_rule.rule.split("/")[2]}'
+    return render_template('users/payments.html', user=current_user, payments=Payment.query.all(), currentRoute=currentRoute)
