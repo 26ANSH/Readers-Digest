@@ -37,20 +37,8 @@ Book in Detail
                     <td class="border border-black p-1 px-2 font-bold">Likes</td>
                     <td class="border border-black p-1 px-2 ">{{ book.likes }}</td>
                 </tr>
-                <!-- <tr>
-                    <td class="border border-black p-1 px-2 font-bold">Quantity</td>
-                    <td id="bookQuantity" class="border border-black p-1 px-2 ">book.quantity </td>
-                </tr> -->
-                <!-- <tr>
-                    <td class="border border-black p-1 px-2 font-bold">Issued</td>
-                    <td id="bookIssue" class="border border-black p-1 px-2">book.issued </td>
-                </tr> -->
                 <tr>
                     <td class="border border-black p-1 px-2 font-bold">Availability</td>
-                    <!-- if book.issued >= book.quantity 
-                    <td id="bookAvailability" class="border border-black p-1 px-2 text-red-500 font-bold">Not Available
-                        <i class="text-lg fas fa-thumbs-down"></i></td> -->
-
                     <td id="bookAvailability" class="border border-black p-1 px-2 text-green-500 p-1 px-2 font-bold">
                         Available <i class="text-lg fas fa-thumbs-up"></i></td>
 
@@ -71,7 +59,20 @@ Book in Detail
             {% autoescape false %}{{ book.volumeInfo.description }}{% endautoescape %}
         </span>
     </div>
+
     <hr class="mt-2">
+
+    {% if user.is_admin %}
+        {% include 'books/admin_book.html' %}
+    {% else %}
+    <!-- add buttons for add to fav, remove from fav -->
+    <div class="flex justify-center">
+        <button class="hover:bg-red-700 bg-red-900 text-white font-bold text-xl p-3" onclick="addToFavs('{{ book.id }}')">Add to favorites</button>
+        <button class="hover:bg-red-700 bg-red-900 text-white font-bold text-xl p-3" onclick="removeFromFavs('{{ book.id }}')">Delete this book</button>
+    </div>
+    
+    {% endif %}
+
 
     {% else %}
 
@@ -85,6 +86,7 @@ Book in Detail
 
     <script src="{{ url_for('static', filename='scripts/books/browse.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts/books/favs.js') }}"></script>
+    
 </div>
 
 {% endblock %}

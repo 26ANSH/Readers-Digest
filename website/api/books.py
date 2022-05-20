@@ -24,6 +24,33 @@ def book_details(id):
     except Exception:
         return {"result": "Something Went Wrong! Please Try Again", "status": False}
 
+def add_book_in_db(id):
+    book = book_details(id)
+
+    if not book["status"]:
+        return False
+
+    current_book = Books.query.filter_by(id=id).first()
+
+    if current_book:
+        return True
+
+    book = book["result"]
+    img_link = ""
+
+    try:
+        if book['volumeInfo']['imageLinks']['thumbnail']:
+            img_link = book['volumeInfo']['imageLinks']['thumbnail']
+    except Exception:
+        img_link = "https://via.placeholder.com/150"
+
+    # new_book = Books(id, "check title", img_link)
+    current_book = Books(
+    id=id, name=book['volumeInfo']['title'], img=img_link)
+    db.session.add(current_book)
+    db.session.commit()
+    return True
+    
 @books_api.get('')
 @login_required
 def browse():
@@ -52,34 +79,19 @@ def browse():
 @books_api.post('/fav/add/<id>')
 @login_required
 def add_fav(id):
-    book = book_details(id)
 
-    if not book["status"]:
-        return jsonify(error=book['result']), 400
+    status = add_book_in_db(id)
 
-    current_book = Books.query.filter_by(id=id).first()
+    if status == False:
+        return book_details(id)["result"]
 
-    if not current_book:
-        book = book["result"]
-        img_link = ""
+    current_book = Books.query.get(id)
 
-        try:
-            if book['volumeInfo']['imageLinks']['thumbnail']:
-                img_link = book['volumeInfo']['imageLinks']['thumbnail']
-        except Exception:
-            img_link = "https://via.placeholder.com/150"
-
-        # new_book = Books(id, "check title", img_link)
-        current_book = Books(
-            id=id, name=book['volumeInfo']['title'], img=img_link)
-        db.session.add(current_book)
-        db.session.commit()
-
-    if current_book in current_user.books:
+    if current_book in current_user.favourites:
         return jsonify(msg="Book already in your Favourites❤️"), 200
 
     current_book.likes += 1
-    current_user.books.append(current_book)
+    current_user.favourites.append(current_book)
     db.session.commit()
 
     return jsonify(msg=f"{current_book.name} added in your Favourites❤️"), 201
@@ -92,11 +104,11 @@ def remove_fav(id):
     if not current_book:
         return jsonify(error=f"There is no such book with ID: {id}"), 400
 
-    if current_book not in current_user.books:
+    if current_book not in current_user.favourites:
         return jsonify(error="This Book is not in your Favourites❤️"), 400
 
     current_book.likes -= 1
-    current_user.books.remove(current_book)
+    current_user.favourites.remove(current_book)
     db.session.commit()
 
     return jsonify(msg=f"{current_book.name} has been removed from your Favourites❤️"), 200

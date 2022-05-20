@@ -2,8 +2,9 @@ from flask import redirect, url_for, Blueprint, request, render_template
 from flask_login import current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user
-from .models import User
+from .models import Users
 from .. import db
+from ..api.mail import send_mail
 
 auth = Blueprint('auth', __name__)
 
@@ -16,7 +17,7 @@ def login():
         email = request.form.get('userEmail')
         password = request.form.get('userPassword')
         
-        user = User.query.filter_by(email=email).first()
+        user = Users.query.filter_by(email=email).first()
 
         if not user or not check_password_hash(user.password, password):
             return redirect(url_for('auth.login', error="Invalid email or password"))
@@ -39,14 +40,14 @@ def signup():
         lname = "" if len(name)<2 else name[len(name)-1]
         password = request.form.get('userPassword')
 
-        user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
+        user = Users.query.filter_by(admin=True, email=email).first() # if this returns a user, then the email already exists in database
 
         if user: # if a user is found, we want to redirect back to signup page so user can try again
             return redirect(url_for('auth.signup', error="user exists"))
             
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-        new_user = User(email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'), admin=False)
-
+        new_user = Users(admin=True,email=email, fname=fname,lname=lname, password=generate_password_hash(password, method='sha256'))
+        send_mail(email, 'Welcome to Readers Digest', 'Welcome to Readers Digest', 'http://172.20.10.2:80/', 'Click here to start reading')
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()

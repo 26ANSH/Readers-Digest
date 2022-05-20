@@ -19,7 +19,5 @@ function setAlert(type, msg)
   </p>
   `
 
-  setTimeout(clearalert, 2000)
-
-  console.log(msg)
+  setTimeout(clearalert, 3000)
 }

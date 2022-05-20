@@ -1,8 +1,5 @@
 from flask import jsonify, redirect, url_for, Blueprint, request, session, render_template
 from flask_login import login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user
-from ..auth.models import User
 
 view = Blueprint('view', __name__)
 
@@ -11,3 +8,5 @@ def index():
     if current_user.is_authenticated:
         return redirect('/books')
     return render_template('main/landing.html')
+
+
