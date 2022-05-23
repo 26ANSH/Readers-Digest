@@ -66,9 +66,9 @@ Book in Detail
         {% include 'books/admin_book.html' %}
     {% else %}
     <!-- add buttons for add to fav, remove from fav -->
-    <div class="flex justify-center">
-        <button class="hover:bg-red-700 bg-red-900 text-white font-bold text-xl p-3" onclick="addToFavs('{{ book.id }}')">Add to favorites</button>
-        <button class="hover:bg-red-700 bg-red-900 text-white font-bold text-xl p-3" onclick="removeFromFavs('{{ book.id }}')">Delete this book</button>
+    <div class="flex justify-evenly">
+        <button class="hover:bg-blue-700 bg-blue-900 text-white font-bold p-3" onclick="addToFavs('{{ book.id }}')">Add to favorites</button>
+        <button class="hover:bg-blue-700 bg-blue-900 text-white font-bold p-3" onclick="removeFromFavs('{{ book.id }}')">Delete this book</button>
     </div>
     
     {% endif %}
