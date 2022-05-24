@@ -178,7 +178,7 @@ User ID #U{{ user_details.id }}
                 {% for fav in user_details.favourites %}
 
                 <tr id="{{ fav.id }}" class="border-blue-900 border-2 border-t-0 mb-2 sm:mb-0 hover:bg-blue-50 mb-2">
-                    <td class="border-blue-900 border p-2 text-center">{{ fav.<i class="fas fa-id-badge    "></i> }}</td>
+                    <td class="border-blue-900 border p-2 text-center">{{ fav.id}}</td>
                     <td class="border-blue-900 border p-2 text-center">
                         <button onclick="issueBook('{{fav.book_id}}')" class="py-1 px-2 bg-blue-900 shadow-md text-white rounded-lg text-lg hover:bg-blue-800">Issue</button>
                     </td>
